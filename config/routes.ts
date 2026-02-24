@@ -43,6 +43,12 @@ export default [
       },
     ],
   },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    icon: "dashboard",
+    component: "./dashboard/broadcast",
+  },
   // {
   //   path: "/dashboard",
   //   name: "dashboard",

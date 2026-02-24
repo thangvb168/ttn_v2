@@ -3,10 +3,20 @@ import { LinkOutlined } from "@ant-design/icons";
 import type { Settings as LayoutSettings } from "@ant-design/pro-components";
 import { SettingDrawer } from "@ant-design/pro-components";
 import "@ant-design/v5-patch-for-react-19";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { RequestConfig, RunTimeLayoutConfig } from "@umijs/max";
 import { history, Link } from "@umijs/max";
 import defaultSettings from "../config/defaultSettings";
 import { errorConfig } from "./requestErrorConfig";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const isDev = process.env.NODE_ENV === "development" || process.env.CI;
 const loginPath = "/user/login";
@@ -124,7 +134,7 @@ export const layout: RunTimeLayoutConfig = ({
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <>
+        <QueryClientProvider client={queryClient}>
           {children}
           {isDev && (
             <SettingDrawer
@@ -139,7 +149,7 @@ export const layout: RunTimeLayoutConfig = ({
               }}
             />
           )}
-        </>
+        </QueryClientProvider>
       );
     },
     ...initialState?.settings,
